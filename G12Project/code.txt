@@ -1,0 +1,58 @@
+from flask import Flask, Response, request
+from spellchecker import SpellChecker
+spell = SpellChecker()
+owned_stocks = []
+import requests 
+import yfinance 
+import matplotlib.pyplot as plt 
+from bs4 import BeautifulSoup  
+import wolframalpha 
+#query = input("Hello there I am JARVIS your personal stock AI. If you have any questions regarding the stock market just drop them down below. If you would like to view the performance of a stock just type 'analyze'. ").strip() 
+#query = query.split() 
+duration = ''
+stocks_list = open("C:\Users\Students\Downloads\Advay_Pandey_Class_12B\Project\StocksList.txt", 'r')
+stocks_list = stocks_list.read().split()
+
+
+    opt = input("Enter your  query: ")
+    question = request.args.get("Enter your query", 50)
+    break_down = question.split()
+    if 'news' in break_down or 'updates' in break_down or 'update' in break_down:
+        for i in break_down:
+            if i in stocks_list:
+                query = ("+").join(break_down)
+                
+                url='https://www.google.com/search?q='+query+"&source=lnms&tbm=nws"
+                
+                response = requests.get(url)  
+                soup = BeautifulSoup(response.content, 'html.parser')  
+                headlines = soup.find_all('h2')  
+                for x in headlines:
+                    '''
+                    <p>(x.text.strip())</p>
+                    '''
+            else:
+                url='https://www.moneycontrol.com/news/business/stocks/'
+                response = requests.get(url)
+                html = response.content
+                soup = BeautifulSoup(html, 'html.parser')  
+                headlines = soup.find_all('h2')
+                '''<h2>("From the World of Stocks: ")</h2>'''
+                
+                for x in headlines:
+                    '''
+                    <p>x.text.strip())</p>
+                    '''
+        
+
+#TAke Screenshot of the sxcreen when searching a question 
+#CReate code that compares teh probability that the found question is the qiuestion searched then read the paragraph below from a provided link 
+
+    else:    
+        query = ("+").join(break_down)
+        url='https://www.bing.com/search?q='+query  
+        response = requests.get(url)  
+        soup = BeautifulSoup(response.text, 'html parser')  
+        headlines = soup.find('body').find_all('li data-priority')  
+        for x in headlines: 
+            '''<p>(x.text.strip())</p>'''
