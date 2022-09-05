@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}
+    JARVIS | NANOSOFT
+{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+<title>JARVIS</title>
+<head>
+<link
+/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+</head>
+
+<body>
+<img />
+<center>
+<h1>
+JARVIS
+</h1>
+</center>
+<body class="text-center">
+
+<div id="chatbox">
+<img
+src="https://res.cloudinary.com/rishblol/image/upload/v1650292555/logo_o9zpnm.png"
+alt=" "<br><br>
+<p class="botText">
+<h4 class="h5 mb-3 font-weight-normal">Hello! I am Jarvis </h4><br>
+</p>
+</div>
+<div id="userInput">
+<input id="textInput" type="text" name="msg" placeholder="Message" />
+</div>
+</div>
+<script>
+        function getBotResponse() {
+          var rawText = $("#textInput").val();
+          var userHtml = '<p class="userText"><span>' + rawText + "</span></p>";
+          $("#textInput").val("");
+          $("#chatbox").append(userHtml);
+          document
+            .getElementById("userInput")
+            .scrollIntoView({ block: "start", behavior: "smooth" });
+          $.get("/get", { msg: rawText }).done(function(data) {
+            var botHtml = '<p class="botText"><span>' + data + "</span></p>";
+            $("#chatbox").append(botHtml);
+            document
+              .getElementById("userInput")
+              .scrollIntoView({ block: "start", behavior: "smooth" });
+          });
+        }
+        $("#textInput").keypress(function(e) {
+          if (e.which == 13) {
+            getBotResponse();
+          }
+        });
+      </script>
+</div>
+</body>
+</html>
+{% endblock %}
