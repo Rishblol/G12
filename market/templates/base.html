@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en" class="dark">
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+      <title>
+          {% block title %}
+
+          {% endblock %}
+      </title>
+    </head>
+    <body class="bg-black text-white">
+    <nav class="bg-black p-4">
+      <div class="container mx-auto flex justify-between items-center">
+          <a class="text-emerald-500 text-2xl font-bold" href="/home">NANOSOFT</a>
+          <div class="block lg:hidden">
+              <button class="flex items-center px-3 py-2 border rounded text-gray-200 border-gray-400 hover:text-white hover:border-white" id="navbar-toggler">
+                  <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-6z"/></svg>
+              </button>
+          </div>
+          <div class="hidden lg:flex lg:items-center lg:w-auto" id="navbarNav">
+              <ul class="lg:flex items-center justify-between text-base text-gray-200 pt-4 lg:pt-0">
+                  <li>
+                      <a class="block lg:inline-block mt-4 lg:mt-0 mr-6 hover:text-white {% if request.endpoint == 'home_page' %}text-emerald-400{% endif %}" href="{{ url_for('home_page') }}">Home</a>
+                  </li>
+                  <li>
+                      <a class="block lg:inline-block mt-4 lg:mt-0 mr-6 hover:text-white {% if request.endpoint == 'index' %}text-emerald-400{% endif %}" href="{{ url_for('index') }}">Chat with others</a>
+                  </li>
+                  <li>
+                      <a class="block lg:inline-block mt-4 lg:mt-0 mr-6 hover:text-white {% if request.endpoint == 'index_marketplace' or request.endpoint == 'buy' or request.endpoint == 'update' or request.endpoint == 'filter' or request.endpoint == 'payment' or request.endpoint == 'remove' or request.endpoint == 'history' or request.endpoint == 'cart' %}text-emerald-400{% endif %}" href="{{ url_for('index_marketplace') }}">Market</a>
+                  </li>
+              </ul>
+              {% if current_user.is_authenticated %}
+                <ul class="lg:flex items-center justify-between text-base text-gray-200 pt-4 lg:pt-0">
+                    <li>
+                        <a class="block lg:inline-block mt-4 lg:mt-0 hover:text-white {% if request.endpoint == 'logout_page' %}text-emerald-400{% endif %}" href="{{ url_for('logout_page') }}">Logout</a>
+                    </li>
+                </ul>
+              {% else %}
+                <ul class="lg:flex items-center justify-between text-base text-gray-200 pt-4 lg:pt-0">
+                    <li>
+                        <a class="block lg:inline-block mt-4 lg:mt-0 mr-6 hover:text-white {% if request.endpoint == 'login_page' %}text-emerald-400{% endif %}" href="{{ url_for('login_page') }}">Login</a>
+                    </li>
+                    <li>
+                        <a class="block lg:inline-block mt-4 lg:mt-0 hover:text-white {% if request.endpoint == 'register_page' %}text-emerald-400{% endif %}" href="{{ url_for('register_page') }}">Register</a>
+                    </li>
+                </ul>
+              {% endif %}
+          </div>
+      </div>
+    </nav>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+              <div class="relative px-4 py-3 leading-normal {{ 'bg-red-800' if category == 'danger' else 'bg-green-800' }} text-white rounded-lg m-4" role="alert">
+                  {# Removed the entire span containing the SVG icon #}
+                  <p class="ml-4">{{ message }}</p> {# Adjusted ml-8 to ml-4 since there's no icon #}
+              </div>
+            {% endfor %}
+        {% endif %}
+      {% endwith %}
+      {% block content %}
+
+      {% endblock %}
+      <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+      <script>
+        document.getElementById('navbar-toggler').onclick = function() {
+            var navbar = document.getElementById('navbarNav');
+            if (navbar.classList.contains('hidden')) {
+                navbar.classList.remove('hidden');
+            } else {
+                navbar.classList.add('hidden');
+            }
+        }
+      </script>
+    </body>
+</html>

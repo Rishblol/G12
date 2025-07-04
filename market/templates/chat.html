@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}
+    CHAT|NANOSOFT
+{% endblock %}
+
+{% block content %}
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.min.js"></script>
+    <script type="text/javascript" charset="utf-8">
+        var socket;
+        $(document).ready(function(){
+            socket = io.connect('http://' + document.domain + ':' + location.port + '/chat');
+            socket.on('connect', function() {
+                socket.emit('join', {});
+            });
+            socket.on('status', function(data) {
+                $('#chat').val($('#chat').val() + '<' + data.msg + '>\n');
+                $('#chat').scrollTop($('#chat')[0].scrollHeight);
+            });
+            socket.on('message', function(data) {
+                $('#chat').val($('#chat').val() + data.msg + '\n');
+                $('#chat').scrollTop($('#chat')[0].scrollHeight);
+            });
+            $('#send').click(function(e) {
+                    text = $('#text').val();
+                    $('#text').val('');
+                    socket.emit('text', {msg: text});
+            });
+        });
+        function leave_room() {
+            socket.emit('left', {}, function() {
+
+                window.location.href = "{{ url_for('index') }}";
+            });
+        }
+    </script>
+
+    <div class="min-h-screen flex items-center justify-center bg-black py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-xl w-full bg-gray-800 p-8 rounded-lg shadow-lg text-white">
+            <h2 class="text-3xl font-bold text-center mb-4">NANOCHAT</h2>
+            <h2 class="text-xl text-center mb-6">Room : {{session['room']}}</h2>
+
+            <textarea readonly id="chat" class="w-full h-64 p-4 mb-4 bg-gray-700 border border-gray-600 rounded-md resize-none text-white placeholder-gray-400 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500" placeholder="No messages yet. Start one..."></textarea>
+
+            <div class="flex space-x-2 mb-4">
+                <input type="text" id="text" class="flex-grow px-4 py-2 bg-gray-700 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 text-white" placeholder="Enter your message here" />
+                <button type="button" id="send" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">SEND</button>
+            </div>
+
+            <div class="text-center">
+                <button type="button" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" onclick="leave_room()">Leave this Chat</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

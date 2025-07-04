@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}
+    Home | NANOSOFT
+{% endblock %}
+{% block content %}
+    <div class="relative overflow-hidden px-3 py-10 md:px-5 md:py-20 m-3 md:m-12 text-center bg-black text-white">
+        <div class="p-5 mx-auto my-5">
+            <img class="mb-4 mx-auto" src="https://res.cloudinary.com/rishblol/image/upload/v1650292555/logo_o9zpnm.png " alt="">
+            <h1 class="text-4xl md:text-5xl font-normal">NANOSOFT</h1>
+            <p class="lead font-normal text-3xl mt-6">Welcome to the World of Stocks</p>
+            {% if not current_user.is_authenticated %}
+                <a class="mt-5 inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" href="{{ url_for('register_page') }}">Register</a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
